@@ -1,6 +1,6 @@
 // use itertools::Itertools;
 use proconio::input;
-use std::collections::{HashMap, HashSet};
+// use std::collections::{HashMap, HashSet};
 
 pub fn main() {
   input! {
@@ -10,29 +10,41 @@ pub fn main() {
     ab: [[usize; 2]; n]
   }
 
-  let mut non_null_rows: Vec<usize> = ab.clone().iter().map(|v| v[0]).collect();
-  non_null_rows.sort();
-  non_null_rows.dedup();
-  let mut non_null_cols: Vec<usize> = ab.clone().iter().map(|v| v[1]).collect();
-  non_null_cols.sort();
-  non_null_cols.dedup();
-
-  let row_mapper: HashMap<usize, usize> = non_null_rows
+  let mut newab: Vec<(usize, usize, usize)> = ab
     .iter()
     .enumerate()
-    .map(|(vec_idx, idx)| (*idx, vec_idx + 1))
-    .collect();
-  let col_mapper: HashMap<usize, usize> = non_null_cols
-    .iter()
-    .enumerate()
-    .map(|(vec_idx, idx)| (*idx, vec_idx + 1))
+    .map(|(i, p)| (p[0], p[1], i))
     .collect();
 
-  for point in ab {
-    println!(
-      "{} {}",
-      row_mapper.get(&point[0]).unwrap(),
-      col_mapper.get(&point[1]).unwrap()
-    );
+  let mut newab2: Vec<(usize, usize, usize)> = Vec::with_capacity(n);
+  newab.sort_by_key(|p| p.0);
+  let mut new_idx = 1;
+  let mut local = newab[0].0;
+  for mut p in newab {
+    if p.0 != local {
+      local = p.0;
+      new_idx += 1;
+    }
+    p.0 = new_idx;
+    newab2.push(p);
+  }
+
+  let mut newab3: Vec<(usize, usize, usize)> = Vec::with_capacity(n);
+  newab2.sort_by_key(|p| p.1);
+  let mut new_idx = 1;
+  let mut local = newab2[0].1;
+  for mut p in newab2 {
+    if p.1 != local {
+      local = p.1;
+      new_idx += 1;
+    }
+    p.1 = new_idx;
+    newab3.push(p);
+  }
+
+  newab3.sort_by_key(|p| p.2);
+
+  for p in newab3 {
+    println!("{} {}", p.0, p.1);
   }
 }
