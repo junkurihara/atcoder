@@ -1,35 +1,27 @@
 use proconio::input;
 use std::cmp::Reverse;
 use std::collections::BinaryHeap;
+use std::io::{stdout, BufWriter, Write};
 
 pub fn main() {
+  let out = stdout();
+  let mut out = BufWriter::new(out.lock());
+
   input! {q: usize}
-  let mut queries: Vec<(u8, i64)> = Vec::new();
+  let mut compressed: BinaryHeap<Reverse<i64>> = BinaryHeap::new();
+  let mut diff = 0;
   for _ in 0..q {
     input! {p: u8}
     if p == 3 {
-      queries.push((p, 0))
+      let minim = compressed.pop().unwrap();
+      writeln!(out, "{}", minim.0 + diff).unwrap();
     } else {
       input! {x: i64}
-      queries.push((p, x));
-    }
-  }
-
-  let mut compressed: BinaryHeap<Reverse<i64>> = BinaryHeap::new();
-  let mut diff = 0;
-  for (p, x) in queries {
-    if p == 3 {
-      // compressed.sort_by_key(|(val, d)| *val + diff - d);
-      // compressed.reverse();
-      // println!("{:?}", compressed);
-      let minim = compressed.pop().unwrap();
-      println!("{:?}", minim.0 + diff);
-      // compressed.push((0, diff));
-    } else if p == 2 {
-      diff += x;
-    } else {
-      // println!("x, diff = {}, {}", x, diff);
-      compressed.push(Reverse(x - diff));
+      if p == 2 {
+        diff += x
+      } else {
+        compressed.push(Reverse(x - diff));
+      }
     }
   }
 
