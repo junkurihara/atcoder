@@ -4,19 +4,19 @@ use proconio::input;
 
 pub fn main() {
   input! {
-    _h: usize,
-    _w: usize,
+    _h: u32,
+    _w: u32,
     n: usize,
-    ab: [[usize; 2]; n]
+    ab: [[u32; 2]; n]
   }
 
-  let mut newab: Vec<(usize, usize, usize)> = ab
+  let mut newab: Vec<(u32, u32, usize)> = ab
     .iter()
     .enumerate()
     .map(|(i, p)| (p[0], p[1], i))
     .collect();
 
-  let mut newab2: Vec<(usize, usize, usize)> = Vec::with_capacity(n);
+  let mut newab2: Vec<(u32, u32, usize)> = Vec::with_capacity(n);
   newab.sort_by_key(|p| p.0);
   let mut new_idx = 1;
   let mut local = newab[0].0;
@@ -29,7 +29,7 @@ pub fn main() {
     newab2.push(p);
   }
 
-  let mut newab3: Vec<(usize, usize, usize)> = Vec::with_capacity(n);
+  let mut newab3: Vec<(u32, u32, usize)> = Vec::with_capacity(n);
   newab2.sort_by_key(|p| p.1);
   let mut new_idx = 1;
   let mut local = newab2[0].1;
