@@ -1,8 +1,10 @@
 use proconio::input;
+use std::cmp::Reverse;
+use std::collections::BinaryHeap;
 
 pub fn main() {
   input! {q: usize}
-  let mut queries: Vec<(u8, i64)> = Vec::with_capacity(q);
+  let mut queries: Vec<(u8, i64)> = Vec::new();
   for _ in 0..q {
     input! {p: u8}
     if p == 3 {
@@ -12,26 +14,27 @@ pub fn main() {
       queries.push((p, x));
     }
   }
-  queries.reverse();
-  let mut compressed: Vec<(i64, i64)> = Vec::new();
-  let mut cnt3 = 0;
+
+  let mut compressed: BinaryHeap<Reverse<i64>> = BinaryHeap::new();
   let mut diff = 0;
   for (p, x) in queries {
-    if p == 1 {
-      println!("{} (p, x) = ({}, {})", diff, p, x);
-      compressed.push((x, diff));
+    if p == 3 {
+      // compressed.sort_by_key(|(val, d)| *val + diff - d);
+      // compressed.reverse();
+      // println!("{:?}", compressed);
+      let minim = compressed.pop().unwrap();
+      println!("{:?}", minim.0 + diff);
+      // compressed.push((0, diff));
     } else if p == 2 {
       diff += x;
     } else {
-      cnt3 += 1
+      // println!("x, diff = {}, {}", x, diff);
+      compressed.push(Reverse(x - diff));
     }
   }
-  // compressed.sort_by_key(|(x, _)| *x - diff);
-  println!("{:?}", compressed);
-  // for i in 0..cnt3 {
-  //   println!("{}", compressed[i].0 + diff);
-  // }
-  // println!("{}", diff);
+
+  // println!("{:?}", compressed.pop());
+
   /*
   1 3   3 # (diff=3 3)
   1 5   5 # (diff=3 3, diff=3 5)
