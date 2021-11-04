@@ -9,13 +9,13 @@ pub fn main() {
   let mut out = BufWriter::new(out.lock());
 
   input! {s: Chars}
-  let mut inc_hs: HashSet<usize> = s
+  let inc_hs: HashSet<usize> = s
     .iter()
     .enumerate()
     .filter(|(_, x)| **x == 'o')
     .map(|(i, _)| i)
     .collect();
-  let mut notinc_hs: HashSet<usize> = s
+  let notinc_hs: HashSet<usize> = s
     .iter()
     .enumerate()
     .filter(|(_, x)| **x == 'x')
