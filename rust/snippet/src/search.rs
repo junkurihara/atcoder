@@ -1,6 +1,7 @@
 use proconio::input;
 // use proconio::marker::Chars;
 use std::cell::RefCell;
+use std::collections::VecDeque;
 use std::io::{stdout, BufWriter, Write};
 use std::rc::Rc;
 
@@ -20,15 +21,41 @@ pub fn main() {
   }
 
   input! {root_idx: u32, target_idx: u32}
-  let mut visited: Vec<bool> = vec![false; n as usize];
+  let mut visited_dfs: Vec<bool> = vec![false; n as usize];
 
   search_dfs(
     graph.get(root_idx as usize - 1).unwrap(),
-    &mut visited,
+    &mut visited_dfs,
+    target_idx,
+  );
+
+  let mut visited_bfs: Vec<bool> = vec![false; n as usize];
+  search_bfs(
+    graph.get(root_idx as usize - 1).unwrap(),
+    &mut visited_bfs,
     target_idx,
   );
 
   // println!("{:#?}", graph);
+}
+
+fn search_bfs(root: &Rc<RefCell<Node>>, stamp: &mut Vec<bool>, target: u32) {
+  let mut que: VecDeque<Rc<RefCell<Node>>> = VecDeque::new();
+  stamp[root.borrow().idx as usize - 1] = true;
+  que.push_back(root.clone());
+
+  while !que.is_empty() {
+    let node = que.pop_front().unwrap();
+    println!("Visited {}", node.borrow().idx);
+    if node.borrow().idx == target {
+      println!("Found!");
+      return;
+    }
+    for adj in node.borrow().children.iter() {
+      stamp[adj.borrow().idx as usize - 1] = true;
+      que.push_back(adj.clone());
+    }
+  }
 }
 
 fn search_dfs(root: &Rc<RefCell<Node>>, stamp: &mut Vec<bool>, target: u32) {
