@@ -9,9 +9,13 @@ public class C {
 
     int max_total = 0;
     for (int i = 0; i < n; i++) {
+      ArrayList<Integer> list_a = new ArrayList<>();
+      list_a.add(a[i]);
+      var min = a[i];
       for (int j = i; j < n; j++) {
-        var slice = Arrays.copyOfRange(a, i, j + 1);
-        int min = Arrays.stream(slice).min().getAsInt();
+        if (a[j] < min) {
+          min = a[j];
+        }
         int total = (j + 1 - i) * min;
         if (total > max_total) {
           max_total = total;
