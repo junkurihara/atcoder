@@ -11,13 +11,9 @@ public class B {
       return local;
     });
 
-    ArrayList<int[]> deq = new ArrayList<>();
-    for (int[] x : d) {
-      deq.add(x);
-      if (deq.size() > 3) {
-        deq.remove(0);
-        // check here
-        if (deq.get(0)[0] == deq.get(0)[1] && deq.get(1)[0] == deq.get(1)[1] && deq.get(2)[0] == deq.get(2)[1]) {
+    for (int ptr = 0; ptr < n; ptr++) {
+      if (ptr < n - 2) {
+        if (d[ptr][0] == d[ptr][1] && d[ptr + 1][0] == d[ptr + 1][1] && d[ptr + 2][0] == d[ptr + 2][1]) {
           System.out.println("Yes");
           return;
         }
